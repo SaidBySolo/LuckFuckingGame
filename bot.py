@@ -132,7 +132,7 @@ async def _join(ctx: Context, color: str, bet: int):
         await ctx.send("Already joined")
     else:
         if color not in ["red", "green"]:
-            return await ctx.send("있는것중에서 골라라 ``red`` ``green``")
+            return await ctx.send("Must choice in ``black`` ``white``")
 
         m = bot.participants[ctx.author.id]["money"]
 
