@@ -21,7 +21,6 @@ class Casino(Bot):
 
 
 bot = Casino("casino", intents=Intents.all())
-bot.load_extension("jishaku")
 
 
 @bot.command("register")
