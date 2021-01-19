@@ -29,7 +29,8 @@ async def _register(ctx: Context):
     if ctx.author.id in bot.registered:
         return await ctx.send("Already registerd")
     bot.registered.append(ctx.author.id)
-    bot.participants.update({ctx.author.id: {"money": 10000, "id": ctx.author.id}})
+    bot.participants.update(
+        {ctx.author.id: {"money": 10000, "id": ctx.author.id}})
     await ctx.send("Succesfully")
 
 
@@ -93,7 +94,8 @@ async def _casino(ctx: Context, time: int, client_seed: str = None):
                 )
 
             winlist = list(
-                filter(lambda ele: ele["color"] == win, bot.participants.values())
+                filter(lambda ele: ele["color"] ==
+                       win, bot.participants.values())
             )
 
             win_money = bot.total_money // len(winlist)
