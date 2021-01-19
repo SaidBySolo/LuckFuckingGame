@@ -1,6 +1,6 @@
-from secrets import token_hex
 from hashlib import sha256
 from hmac import new
+from secrets import token_hex
 
 
 class RolledData:
