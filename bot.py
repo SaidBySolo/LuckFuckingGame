@@ -34,7 +34,11 @@ async def _register(ctx: Context):
     if ctx.author.id in bot.registered:
         return await ctx.send("Already registerd")
     bot.registered.append(ctx.author.id)
-    bot.participants.update({ctx.author.id: {"money": 10000, "id": ctx.author.id}})
+    bot.participants.update(
+        {ctx.author.id: {
+            "money": 10000,
+            "id": ctx.author.id
+        }})
     await ctx.send("Succesfully")
 
 
@@ -51,17 +55,17 @@ async def _casino(ctx: Context, time: int, client_seed: str = None):
         return await ctx.send("Please register")
     if not bot.created and not bot.game:
         if time < 0 or time > 180:
-            return await ctx.send("The time is negative or cannot exceed 180 seconds")
+            return await ctx.send(
+                "The time is negative or cannot exceed 180 seconds")
         bot.created = True
         pf = ProvablyFair(client_seed)
-        bot.game = await ctx.send(
-            embed=Embed(
-                title="Gamble ON",
-                description=f"Client seed: ``{pf.client_seed}``\nNonce: ``{pf.nonce}``\n",
-            )
-            .add_field(name=f"Current bet amount", value=str(bot.total_money))
-            .set_footer(text=f"Server seed hash: {pf.server_seed_hash}")
-        )
+        bot.game = await ctx.send(embed=Embed(
+            title="Gamble ON",
+            description=
+            f"Client seed: ``{pf.client_seed}``\nNonce: ``{pf.nonce}``\n",
+        ).add_field(name=f"Current bet amount", value=str(
+            bot.total_money)).set_footer(
+                text=f"Server seed hash: {pf.server_seed_hash}"))
         await asyncio.sleep(time)
 
         try:
@@ -73,33 +77,27 @@ async def _casino(ctx: Context, time: int, client_seed: str = None):
                 win = "white"
 
             if not bot.gammer:
-                return await ctx.send(
-                    embed=Embed(
-                        title=f"Gamble OFF\n\nServer seed: ``{pf.server_seed}``",
-                        description=f"Client seed: ``{pf.client_seed}``\n\nNonce: ``{pf.nonce}``\n\nRolled: ``{rolled}``",
-                    )
-                    .add_field(name="Winner", value=win)
-                    .add_field(name=f"Nobody joined", value="None")
-                    .set_footer(text=f"Server seed hash: {pf.server_seed_hash}")
-                )
+                return await ctx.send(embed=Embed(
+                    title=f"Gamble OFF\n\nServer seed: ``{pf.server_seed}``",
+                    description=
+                    f"Client seed: ``{pf.client_seed}``\n\nNonce: ``{pf.nonce}``\n\nRolled: ``{rolled}``",
+                ).add_field(name="Winner", value=win).add_field(
+                    name=f"Nobody joined", value="None").set_footer(
+                        text=f"Server seed hash: {pf.server_seed_hash}"))
             elif 1 == len(bot.gammer):
                 id = bot.gammer[0]
                 bot.participants[id]["money"] += bot.total_money
-                return await ctx.send(
-                    embed=Embed(
-                        title=f"Gamble OFF\n\nServer seed: ``{pf.server_seed}``",
-                        description=f"Client seed: ``{pf.client_seed}``\n\nNonce: ``{pf.nonce}``\n\nRolled: ``{rolled}``",
-                    )
-                    .add_field(name="Winner", value=win)
-                    .add_field(
-                        name=f"went back to the host", value=str(bot.total_money)
-                    )
-                    .set_footer(text=f"Server seed hash: {pf.server_seed_hash}")
-                )
+                return await ctx.send(embed=Embed(
+                    title=f"Gamble OFF\n\nServer seed: ``{pf.server_seed}``",
+                    description=
+                    f"Client seed: ``{pf.client_seed}``\n\nNonce: ``{pf.nonce}``\n\nRolled: ``{rolled}``",
+                ).add_field(name="Winner", value=win).add_field(
+                    name=f"went back to the host", value=str(bot.total_money)
+                ).set_footer(text=f"Server seed hash: {pf.server_seed_hash}"))
 
             winlist = list(
-                filter(lambda ele: ele["color"] == win, bot.participants.values())
-            )
+                filter(lambda ele: ele["color"] == win,
+                       bot.participants.values()))
 
             win_money = bot.total_money // len(winlist)
 
@@ -107,18 +105,14 @@ async def _casino(ctx: Context, time: int, client_seed: str = None):
                 id = winner["id"]
                 bot.participants[id]["money"] += win_money
 
-            await ctx.send(
-                embed=Embed(
-                    title=f"Gamble OFF\n\nServer seed: ``{pf.server_seed}``",
-                    description=f"Client seed: ``{pf.client_seed}``\n\nNonce: ``{pf.nonce}``\n\nRolled: ``{rolled}``",
-                )
-                .add_field(name="Winner", value=win)
-                .add_field(
-                    name=f"Amount to return to the winning team",
-                    value=str(bot.total_money),
-                )
-                .set_footer(text=f"Server seed hash: {pf.server_seed_hash}")
-            )
+            await ctx.send(embed=Embed(
+                title=f"Gamble OFF\n\nServer seed: ``{pf.server_seed}``",
+                description=
+                f"Client seed: ``{pf.client_seed}``\n\nNonce: ``{pf.nonce}``\n\nRolled: ``{rolled}``",
+            ).add_field(name="Winner", value=win).add_field(
+                name=f"Amount to return to the winning team",
+                value=str(bot.total_money),
+            ).set_footer(text=f"Server seed hash: {pf.server_seed_hash}"))
 
         finally:
             bot.created = False
@@ -161,12 +155,12 @@ async def _join(ctx: Context, color: str, bet: int):
 
 @bot.command("verify")
 async def _verify(
-    ctx: Context,
-    roll: int,
-    nonce: int,
-    server_seed: str,
-    server_seed_hash: str,
-    client_seed: str,
+        ctx: Context,
+        roll: int,
+        nonce: int,
+        server_seed: str,
+        server_seed_hash: str,
+        client_seed: str,
 ):
     pf = ProvablyFair()
     rd = RolledData(roll, nonce, server_seed_hash, client_seed)

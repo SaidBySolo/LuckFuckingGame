@@ -4,7 +4,8 @@ from secrets import token_hex
 
 
 class RolledData:
-    def __init__(self, roll: int, nonce: int, server_seed_hash: str, client_seed: str):
+    def __init__(self, roll: int, nonce: int, server_seed_hash: str,
+                 client_seed: str):
         self.roll = roll
         self.nonce = nonce
         self.server_seed_hash = server_seed_hash
@@ -13,19 +14,17 @@ class RolledData:
 
 class ProvablyFair:
     def __init__(
-        self,
-        client_seed: str = None,
-        server_seed: str = None,
-        nonce: int = 0,
-        last_rolled_data=None,
+            self,
+            client_seed: str = None,
+            server_seed: str = None,
+            nonce: int = 0,
+            last_rolled_data=None,
     ) -> None:
         self.client_seed = client_seed or token_hex(20)
         self.nonce = nonce
         self.server_seed, self.server_seed_hash = (
             self.hash_server_seed(server_seed)
-            if server_seed
-            else self.generate_server_seed()
-        )
+            if server_seed else self.generate_server_seed())
         self.last_rolled_data = last_rolled_data
 
     @classmethod
@@ -69,15 +68,15 @@ class ProvablyFair:
         count = 0
 
         while True:
-            roll_number_str = hmac_hash[count : count + 5]
+            roll_number_str = hmac_hash[count:count + 5]
             roll_number = int(roll_number_str, 16)
             if roll_number > 999_999:
                 count += 5
             else:
                 break
 
-        self.last_rolled_data = RolledData(
-            roll_number, self.nonce, self.server_seed_hash, self.client_seed
-        )
+        self.last_rolled_data = RolledData(roll_number, self.nonce,
+                                           self.server_seed_hash,
+                                           self.client_seed)
 
         return roll_number
