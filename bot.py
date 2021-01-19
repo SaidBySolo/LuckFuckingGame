@@ -1,14 +1,17 @@
 import asyncio
-from typing import Any, Optional
+from typing import Any
+from typing import Optional
 
 from discord import Intents
 from discord.embeds import Embed
 from discord.ext.commands import Bot
 from discord.ext.commands.context import Context
-from discord.ext.commands.errors import BadArgument, MissingRequiredArgument
+from discord.ext.commands.errors import BadArgument
+from discord.ext.commands.errors import MissingRequiredArgument
 from discord.message import Message
 
-from utils.provablyfair import ProvablyFair, RolledData
+from utils.provablyfair import ProvablyFair
+from utils.provablyfair import RolledData
 
 
 class Casino(Bot):
