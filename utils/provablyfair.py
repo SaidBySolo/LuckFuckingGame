@@ -69,7 +69,7 @@ class ProvablyFair:
         count = 0
 
         while True:
-            roll_number_str = hmac_hash[count: count + 5]
+            roll_number_str = hmac_hash[count : count + 5]
             roll_number = int(roll_number_str, 16)
             if roll_number > 999_999:
                 count += 5
