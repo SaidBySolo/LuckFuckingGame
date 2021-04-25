@@ -35,15 +35,12 @@ class ProvablyFair:
         pf_instance_roll = pf_instance.roll(nonce=rolled_data.nonce)
         pf_instance_data = pf_instance.last_rolled_data
 
-        try:
-            assert pf_instance.server_seed == server_seed
-            assert pf_instance.server_seed_hash == rolled_data.server_seed_hash
-            assert pf_instance_data.nonce == rolled_data.nonce
-            assert pf_instance_data.roll == rolled_data.roll == pf_instance_roll
-        except AssertionError:
-            return False
-
-        return True
+        return (
+            pf_instance.server_seed == server_seed
+            and pf_instance.server_seed_hash == rolled_data.server_seed_hash
+            and pf_instance_data.nonce == rolled_data.nonce
+            and pf_instance_data.roll == rolled_data.roll == pf_instance_roll
+        )
 
     @staticmethod
     def generate_server_seed():
